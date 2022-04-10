@@ -2,6 +2,38 @@
 
 }
 
+body{
+    
+
+}
+
+#devIcon{
+
+    width : 100%;
+    max-width : 400px;
+    height : auto;
+}
+
+#heading{
+    float : left;
+    max-width:400px;
+    margin : 100px;
+    font-size: 72px ;
+
+}
+#devIcon{
+    float : right;
+    
+}
+
 .header{
-    background-color : #3F3D56;
+    background-color : #3F3D56 !important;
+    min-height : 600px;
+
+}
+
+#subhead{
+    margin : 50px;
+    color: #3F3D56;
+    font-size: 56px;
 }
