@@ -58,13 +58,15 @@ var temp = {
 
 repos = [];
 
-var data='';
 var repo = {
     "name": "awesome-learn-to-code",
     "html_url": "https://github.com/gcnit/awesome-learn-to-code",
     "description": "A list of awesome resources for learning to code",
     "updated_at": "2020-08-12T18:21:53Z"
 };
+
+
+
 
 app.all('/api/developers', (req, res,next) => {
 
@@ -82,15 +84,21 @@ app.all('/api/developers', (req, res,next) => {
 });
 
 
+
+
 app.get("/api/developers/:id", (req,res) => {
 
     res.send(developers[req.params.id]);
 })
 
+
+
 app.delete('api/developers/:id', (req,res) => {
     console.log(delete developers[req.params.id]);
     res.send(developers);
 })
+
+
 
 app.get("/api/github/:id", (req,res) => {
 
