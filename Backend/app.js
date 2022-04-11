@@ -83,7 +83,9 @@ app.all('/api/developers', (req, res,next) => {
     next();
 });
 
-
+app.post('/api/post/:id', (req,res) => {
+    res.send(developers[req.params.id]);
+})
 
 
 app.get("/api/developers/:id", (req,res) => {
@@ -92,10 +94,10 @@ app.get("/api/developers/:id", (req,res) => {
 })
 
 
-
-app.delete('api/developers/:id', (req,res) => {
+app.delete('/api/developers/:id', (req,res) => {
     console.log(delete developers[req.params.id]);
     res.send(developers);
+    
 })
 
 
