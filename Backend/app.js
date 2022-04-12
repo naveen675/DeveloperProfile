@@ -1,12 +1,10 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser')
 const port = process.env.PORT || 3000;
 const fetch = require("node-fetch");
-app.use(bodyParser.urlencoded({
-    extended: true
-  }));
-  
+
+app.use(express.json());   // Important for sending data in json format
+
 var developers = {
 
     gcnit : {
@@ -68,24 +66,75 @@ var repo = {
 
 
 
-app.all('/api/developers', (req, res,next) => {
+app.get('/api/developers', (req, res,next) => {
 
-    if(req.method == "GET"){
-        res.send(developers);
-    }
-
-    else if(req.method == "POST"){
+    res.send(developers);
         
-        console.log(req.body);
-        res.send("post request completed")
-    }
-
-    next();
 });
 
-app.post('/api/post/:id', (req,res) => {
-    res.send(developers[req.params.id]);
+app.post('/api/developers', (req,res) => {
+
+    var data = req.body;
+    var git_id = data["github_id"];
+    var linkedin_id = data["linkedin_id"];
+    var codechef_id = data["codechef_id"];
+    var hackerrank_id = data["hackerrank_id"];
+    var twitter_id = data["twitter_id"];
+    var medium_id = data["medium_id"];
+    console.log(git_id);
+
+    data = fetch(`https://api.github.com/users/${git_id}`).then(
+        (response) => {return response.json();}
+    ).then(
+        (data) => {
+            temp["id"] = git_id;
+            temp["avatar_url"] = data["avatar_url"];
+            temp["name"] = data["name"];
+            temp["company"] = data["company"];
+            temp["blog"] = data["blog"];
+            temp["location"] = data["location"];
+            temp["bio"] = data["bio"];
+            temp["email"] = data["email"];
+            temp["github_id"] = git_id;
+            temp["linkedin_id"] = linkedin_id;
+            temp["hackerrank_id"] = hackerrank_id;
+            temp["codechef_id"] = codechef_id;
+            temp["medium_id"] = medium_id;
+            temp["twitter_id"] = twitter_id;
+            return temp;
+        }
+    ).then(
+        (temp) => {
+            data = data = fetch(`https://api.github.com/users/${git_id}/repos`).then(
+                (response) => {return response.json();}
+            ).then(
+                (data) =>{
+                    Object.entries(data).forEach(([key, value]) => {
+
+                        repo = {};
+                        
+                        repo["name"] = value["name"];
+                        repo["html_url"] = value["html_url"];
+                        repo["description"] = value["description"];
+                        repo["updated_at"] = value["updated_at"];
+                        
+                        repos.push(repo);
+                        
+                    } );
+                    
+                    temp["repos"] = repos;
+                    developers[temp["id"]] = temp;
+                    res.send(developers);
+
+                }
+            )
+        }
+    )
+
+
+    // res.send(developers);
 })
+
 
 
 app.get("/api/developers/:id", (req,res) => {
